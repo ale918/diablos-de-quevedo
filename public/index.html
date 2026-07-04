@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diablos de Quevedo — Grupo de Danza</title>
+<meta name="description" content="Diablos de Quevedo, grupo de danza de Quevedo, Ecuador. Espectáculos, bailes y presentaciones para todo tipo de eventos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <img id="logoImg" src="" alt="" style="display:none;">
+      <span>DIABLOS <span class="accent">DE QUEVEDO</span></span>
+    </div>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#inicio" class="active">Inicio</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#eventos">Eventos</a>
+      <a href="#galeria">Galería</a>
+      <a href="#miembros">Miembros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="socials" id="socials"></div>
+      <a href="#contacto" class="btn">Únete</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow">Grupo de danza · Quevedo, Ecuador</span>
+      <h1 class="hero-title">DIABLOS<span class="line2">DE QUEVEDO</span></h1>
+      <p class="hero-tagline" id="heroTagline">PASIÓN. CULTURA. MOVIMIENTO.</p>
+      <p class="hero-desc" id="heroDesc"></p>
+      <div class="hero-actions">
+        <a href="#nosotros" class="btn">Conócenos</a>
+        <a href="#eventos" class="btn outline">Ver eventos</a>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <span class="placeholder-icon">💃🕺</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUICK LINKS ================= -->
+<div class="quick-links">
+  <a href="#nosotros" class="quick-card">
+    <span class="icon">🎭</span>
+    <h3>Sobre Nosotros</h3>
+    <p>Conoce nuestra historia, valores y lo que nos mueve.</p>
+    <span class="go">Ver más →</span>
+  </a>
+  <a href="#eventos" class="quick-card">
+    <span class="icon">📅</span>
+    <h3>Próximos Eventos</h3>
+    <p>No te pierdas nuestras presentaciones y espectáculos.</p>
+    <span class="go">Ver calendario →</span>
+  </a>
+  <a href="#miembros" class="quick-card">
+    <span class="icon">👥</span>
+    <h3>Miembros</h3>
+    <p>Únete al grupo y sé parte de la familia.</p>
+    <span class="go">Ver miembros →</span>
+  </a>
+  <a href="#contacto" class="quick-card">
+    <span class="icon">📩</span>
+    <h3>Contrátanos</h3>
+    <p>Llevamos nuestro espectáculo a tu evento o fiesta.</p>
+    <span class="go">Contactar →</span>
+  </a>
+</div>
+
+<!-- ================= GALERÍA (única sección) ================= -->
+<section id="galeria">
+  <div class="container">
+    <span class="eyebrow">Multimedia</span>
+    <h2 class="section-title">Galería</h2>
+    <svg class="flourish" viewBox="0 0 120 18"><path d="M2 9 Q 30 0, 60 9 T 118 9" fill="none" stroke-width="2"/></svg>
+    <p class="section-lede">Fotos y videos de nuestras presentaciones, ensayos y eventos.</p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<!-- ================= EVENTOS ================= -->
+<section class="section-alt" id="eventos">
+  <div class="container">
+    <span class="eyebrow">Agenda</span>
+    <h2 class="section-title">Próximos Eventos</h2>
+    <svg class="flourish" viewBox="0 0 120 18"><path d="M2 9 Q 30 0, 60 9 T 118 9" fill="none" stroke-width="2"/></svg>
+    <p class="section-lede">Rodadas culturales, fiestas patronales, bodas y shows privados.</p>
+    <div class="eventos-list" id="eventosList"></div>
+  </div>
+</section>
+
+<!-- ================= NOSOTROS ================= -->
+<section id="nosotros">
+  <div class="container">
+    <span class="eyebrow">Nuestra historia</span>
+    <h2 class="section-title">Sobre Nosotros</h2>
+    <svg class="flourish" viewBox="0 0 120 18"><path d="M2 9 Q 30 0, 60 9 T 118 9" fill="none" stroke-width="2"/></svg>
+    <div class="nosotros-grid">
+      <p id="historiaTexto" style="color:var(--muted); font-size:1.02rem;"></p>
+      <div class="valores" id="valoresList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MIEMBROS ================= -->
+<section class="section-alt" id="miembros">
+  <div class="container">
+    <span class="eyebrow">La familia</span>
+    <h2 class="section-title">Miembros</h2>
+    <svg class="flourish" viewBox="0 0 120 18"><path d="M2 9 Q 30 0, 60 9 T 118 9" fill="none" stroke-width="2"/></svg>
+    <p class="section-lede">Quienes hacen posible cada presentación.</p>
+    <div class="miembros-grid" id="miembrosGrid"></div>
+  </div>
+</section>
+
+<!-- ================= CONTACTO ================= -->
+<section id="contacto">
+  <div class="container">
+    <span class="eyebrow">Escríbenos</span>
+    <h2 class="section-title">Contacto</h2>
+    <svg class="flourish" viewBox="0 0 120 18"><path d="M2 9 Q 30 0, 60 9 T 118 9" fill="none" stroke-width="2"/></svg>
+    <div class="contacto-grid">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="tipoEvento">Tipo de evento</label>
+          <select id="tipoEvento">
+            <option>Fiesta patronal</option>
+            <option>Boda</option>
+            <option>Evento privado</option>
+            <option>Festival cultural</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" required placeholder="Cuéntanos sobre tu evento: fecha, lugar, tipo de show..."></textarea>
+        </div>
+        <button type="submit" class="btn">Enviar mensaje</button>
+      </form>
+
+      <div class="contacto-info">
+        <div class="info-row"><span class="icon">📍</span><div><h4>Ubicación</h4><p id="ubicacionText"></p></div></div>
+        <div class="info-row"><span class="icon">✉️</span><div><h4>Correo</h4><a id="emailLink" href="#"></a></div></div>
+        <div class="info-row"><span class="icon">📱</span><div><h4>Teléfono / WhatsApp</h4><a id="whatsappLink" href="#"></a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span class="footer-brand">Diablos <span style="color:var(--red-bright)">de Quevedo</span></span>
+    <span class="footer-note">© <span id="year"></span> Diablos de Quevedo — Todos los derechos reservados</span>
+  </div>
+</footer>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
+<script src="/js/content.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>
