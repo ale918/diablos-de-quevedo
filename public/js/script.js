@@ -1,5 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const C = SITE_CONTENT;
+document.addEventListener('DOMContentLoaded', async () => {
+  let C;
+  try {
+    const res = await fetch('/api/content');
+    C = await res.json();
+  } catch (e) {
+    console.error('No se pudo cargar el contenido del sitio:', e);
+    return;
+  }
 
   // ---- Datos generales ----
   document.getElementById('year').textContent = new Date().getFullYear();
