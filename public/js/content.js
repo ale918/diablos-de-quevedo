@@ -29,7 +29,7 @@ const SITE_CONTENT = {
 
     // Imagen de fondo del hero (portada). Reemplaza por una foto de una
     // presentación/baile del grupo subida a Cloudinary.
-    heroImagen: "https://res-console.cloudinary.com/debaqsqnb/thumbnails/transform/v1/image/upload/Y19maWxsLGhfMjAwLHdfMjAw/v1/M2RjMmJjZWUtN2QxYS00NmQzLWJiN2QtMGQ4OWU4ZWNkZjU5X3BnNHpncw==/template_primary",
+    heroImagen: "https://res.cloudinary.com/debaqsqnb/image/upload/v1783276841/3dc2bcee-7d1a-46d3-bb7d-0d89e8ecdf59_pg4zgs.jpg",
 
     // Logo del grupo (el que ya tienen). Reemplaza con la URL de Cloudinary.
     logo: "" // ej: "https://res.cloudinary.com/TU_CLOUD/image/upload/v1/logo-diablos.png"
