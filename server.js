@@ -13,18 +13,24 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'diablos2026';
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 }
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB máx (videos pesan más que fotos)
 });
 
 app.use(compression());
 app.use(express.json());
 
+// Sin caché: los cambios se ven al instante (útil mientras se edita el sitio)
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: false, lastModified: false }));
 
+// ---------------------------------------------------------------------------
+// AUTENTICACIÓN DEL ADMIN
+// Simple: cada request a /api/admin/* debe traer el header x-admin-password
+// con la contraseña correcta (definida en la variable de entorno ADMIN_PASSWORD).
+// ---------------------------------------------------------------------------
 function requireAdmin(req, res, next) {
   const pass = req.get('x-admin-password');
   if (pass && pass === ADMIN_PASSWORD) return next();
@@ -37,6 +43,9 @@ app.post('/api/admin/login', (req, res) => {
   return res.status(401).json({ error: 'Contraseña incorrecta.' });
 });
 
+// ---------------------------------------------------------------------------
+// CONTENIDO PÚBLICO (lo consume el sitio principal)
+// ---------------------------------------------------------------------------
 app.get('/api/content', (req, res) => {
   try {
     res.json(readData());
@@ -45,6 +54,9 @@ app.get('/api/content', (req, res) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// GENERAL (datos del grupo, redes, hero, logo)
+// ---------------------------------------------------------------------------
 app.put('/api/admin/general', requireAdmin, async (req, res) => {
   try {
     const data = readData();
@@ -60,7 +72,7 @@ app.post('/api/admin/general/imagen', requireAdmin, upload.single('archivo'), as
   try {
     if (!isConfigured()) return res.status(400).json({ error: 'Cloudinary no está configurado (faltan variables de entorno).' });
     if (!req.file) return res.status(400).json({ error: 'No se recibió ningún archivo.' });
-    const campo = req.body.campo;
+    const campo = req.body.campo; // "heroImagen" o "logo"
     if (!['heroImagen', 'logo'].includes(campo)) return res.status(400).json({ error: 'Campo inválido.' });
 
     const result = await uploadBuffer(req.file.buffer, { folder: 'diablos-de-quevedo/general', resourceType: 'image' });
@@ -73,6 +85,9 @@ app.post('/api/admin/general/imagen', requireAdmin, upload.single('archivo'), as
   }
 });
 
+// ---------------------------------------------------------------------------
+// GALERÍA
+// ---------------------------------------------------------------------------
 app.post('/api/admin/galeria', requireAdmin, upload.single('archivo'), async (req, res) => {
   try {
     if (!isConfigured()) return res.status(400).json({ error: 'Cloudinary no está configurado (faltan variables de entorno).' });
@@ -101,6 +116,9 @@ app.delete('/api/admin/galeria/:id', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// ---------------------------------------------------------------------------
+// MIEMBROS
+// ---------------------------------------------------------------------------
 app.post('/api/admin/miembros', requireAdmin, upload.single('foto'), async (req, res) => {
   try {
     const { nombre, rol } = req.body;
@@ -130,6 +148,9 @@ app.delete('/api/admin/miembros/:id', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// ---------------------------------------------------------------------------
+// EVENTOS
+// ---------------------------------------------------------------------------
 app.post('/api/admin/eventos', requireAdmin, (req, res) => {
   const { titulo, fecha, lugar, descripcion } = req.body;
   if (!titulo || !fecha) return res.status(400).json({ error: 'Falta título o fecha.' });
@@ -147,6 +168,9 @@ app.delete('/api/admin/eventos/:id', requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+// ---------------------------------------------------------------------------
+// Página del sitio (cualquier ruta no reconocida devuelve el index)
+// ---------------------------------------------------------------------------
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

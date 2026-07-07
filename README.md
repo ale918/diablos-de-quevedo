@@ -19,43 +19,24 @@ diablos-danza/
         └── script.js        ← lógica del sitio, normalmente no hace falta tocarlo
 ```
 
-## 1. Editar el contenido (lo más importante)
+## 1. Editar el contenido (ahora desde el panel admin)
 
-Todo el contenido del sitio vive en **`public/js/content.js`**. No necesitas tocar
-HTML ni CSS para:
+**Ya no se edita `content.js` a mano.** Todo el contenido (fotos, videos,
+miembros, eventos, textos, redes sociales) se administra desde el panel
+`/admin` del sitio, con formularios y subida de archivos directo a Cloudinary.
+Ve a la sección **6. Panel de administración** más abajo para la guía completa
+(incluye las variables de entorno que hay que configurar primero).
 
-- Cambiar el número de WhatsApp, redes sociales, email.
-- Agregar/quitar eventos.
-- Agregar fotos y videos a la galería.
-- Agregar miembros del grupo.
-- Cambiar la historia y valores de "Nosotros".
+`content.js` quedó obsoleto — el sitio público ahora carga el contenido desde
+`/api/content`, que lee del archivo `data/data.json` (ese sí lo edita el
+servidor automáticamente cuando usas el panel, no tú a mano).
 
-Cada campo `url` o `foto` vacío (`""`) se muestra como un recuadro con un ícono de
-"agregar foto/video" — apenas pegues el link de Cloudinary ahí, aparece la imagen real.
+## 2. Cloudinary — ya no hace falta copiar/pegar URLs a mano
 
-## 2. Subir tus fotos y videos a Cloudinary
-
-1. Crea una cuenta gratis en [cloudinary.com](https://cloudinary.com).
-2. En el **Dashboard**, ve a **Media Library** → botón **Upload** → sube tus fotos
-   y videos (puedes organizarlos en una carpeta, ej. `diablos-quevedo`).
-3. Al subir cada archivo, Cloudinary te da una URL pública, algo como:
-   ```
-   https://res.cloudinary.com/tu_cloud_name/image/upload/v1234567890/diablos-quevedo/foto1.jpg
-   https://res.cloudinary.com/tu_cloud_name/video/upload/v1234567890/diablos-quevedo/video1.mp4
-   ```
-4. Copia esa URL y pégala en el campo correspondiente dentro de `content.js`
-   (por ejemplo en `galeria`, `miembros[].foto`, o `general.heroImagen`).
-
-**Tip:** para que las fotos carguen más rápido y del tamaño correcto, puedes agregar
-parámetros de transformación de Cloudinary directo en la URL, por ejemplo:
-```
-.../upload/w_800,h_800,c_fill,g_auto,q_auto,f_auto/diablos-quevedo/foto1.jpg
-```
-- `w_800,h_800,c_fill` → recorta y ajusta tamaño
-- `g_auto` → enfoque automático inteligente (detecta caras/sujeto)
-- `q_auto,f_auto` → calidad y formato optimizados automáticamente
-
-Para tu logo, súbelo también a Cloudinary y pega la URL en `general.logo`.
+Antes había que subir a Cloudinary manualmente y pegar la URL en un archivo.
+Ahora el panel `/admin` sube directo a tu cuenta de Cloudinary por ti — solo
+necesitas tener la cuenta creada y sus credenciales puestas como variables de
+entorno (ver sección 6).
 
 ## 3. Probar el sitio localmente (opcional)
 
@@ -97,7 +78,78 @@ git push -u origin main
    `diablos-de-quevedo-production.up.railway.app`). Puedes conectar tu propio
    dominio desde **Settings → Networking → Custom Domain** dentro del proyecto en Railway.
 
-## 6. Actualizaciones futuras
+## 6. Panel de administración (`/admin`)
+
+Ahora el sitio tiene un panel privado para subir fotos y videos, y editar
+eventos/miembros/datos generales **sin tocar código ni Git**. Vive en:
+
+```
+https://TU-SITIO.up.railway.app/admin
+```
+
+### Variables de entorno necesarias
+
+Antes de que el panel funcione (sobre todo para subir fotos/videos), necesitas
+configurar 4 variables de entorno:
+
+| Variable | Para qué sirve |
+|---|---|
+| `ADMIN_PASSWORD` | La contraseña para entrar a `/admin`. Cámbiala, no dejes la de ejemplo. |
+| `CLOUDINARY_CLOUD_NAME` | De tu cuenta de Cloudinary (Dashboard). |
+| `CLOUDINARY_API_KEY` | De tu cuenta de Cloudinary (Dashboard). |
+| `CLOUDINARY_API_SECRET` | De tu cuenta de Cloudinary (Dashboard). **Nunca la subas a GitHub.** |
+
+Las 3 de Cloudinary las encuentras en tu Dashboard de Cloudinary, sección
+**"Product Environment Credentials"** o **"API Keys"**.
+
+### Configurarlas en Railway
+
+1. Entra a tu proyecto en Railway.
+2. Ve a la pestaña **Variables**.
+3. Agrega las 4, una por una (nombre y valor).
+4. Railway va a redesplegar solo tras guardar.
+
+### Configurarlas en tu PC (para probar el admin en localhost)
+
+1. En la carpeta `diablos-danza`, copia el archivo `.env.example` y renombra la
+   copia a `.env`.
+2. Abre `.env` y reemplaza los valores de ejemplo por los reales.
+3. Reinicia el servidor (`Ctrl+C` y `npm start` de nuevo).
+
+**Nota:** `.env` nunca se sube a GitHub (ya está en `.gitignore`) — es solo
+para tu computadora.
+
+### ⚠️ Importante: persistencia de datos en Railway (Volume)
+
+El panel admin guarda todo (miembros, galería, eventos) en un archivo llamado
+`data.json` dentro del proyecto. El problema: **cada vez que Railway
+redespliega** (por ejemplo, cuando haces `git push`), reconstruye el proyecto
+desde cero — y si `data.json` no está en un lugar persistente, perderías todo
+lo que agregaste desde el panel.
+
+Para evitarlo, agrega un **Volume** en Railway:
+
+1. En tu proyecto de Railway, ve a la pestaña **Settings** del servicio.
+2. Busca la sección **Volumes** → **"+ New Volume"**.
+3. Ponle un nombre (ej. `data`) y como **Mount Path** escribe:
+   ```
+   /data
+   ```
+4. Ve a **Variables** y agrega una nueva:
+   ```
+   DATA_FILE=/data/data.json
+   ```
+5. Redespliega (Railway lo hace solo tras guardar variables).
+
+A partir de ahí, todo lo que agregues desde `/admin` sobrevive a futuros
+despliegues, aunque vuelvas a hacer `git push` con cambios de código.
+
+**Mientras no configures el Volume:** el panel admin funciona igual, pero
+si vuelves a hacer `git push`, los eventos/miembros/galería que agregaste
+desde `/admin` en Railway se perderán (localmente en tu PC no hay este
+problema, ahí `data.json` sí es permanente).
+
+## 7. Actualizaciones futuras
 
 Cada vez que quieras cambiar contenido (nuevo evento, nueva foto, nuevo miembro):
 
